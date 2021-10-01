@@ -1,0 +1,7 @@
+
+ros_packages/geometry/
+ros_packages/laser_filters/
+ros_packages/openslam_gmapping/
+ros_packages/rosserial/
+ros_packages/rplidar_ros/
+ros_packages/slam_gmapping/
