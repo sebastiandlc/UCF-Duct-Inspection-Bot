@@ -1,0 +1,114 @@
+h1
+{
+  color: Gold;
+  font-family: Georgia, Times, serif;
+  font-size: 3rem;
+}
+
+body
+{
+  background-color: Grey;
+}
+
+h2
+{
+  color: white;
+  text-align: center;
+}
+
+.connection, p
+{
+  color: white;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.container
+{
+  margin-left: 0em;
+}
+
+.connection
+{
+  color: white;
+  text-align: center;
+}
+
+.col-md
+{
+  margin-top: 28em;
+}
+
+.row
+{
+  margin-right: 0em;
+}
+
+.topContainer 
+{
+    height: 20em;
+    margin: auto;
+    padding: 10px;
+}
+
+#videoElement
+{
+    margin-top: 1em;
+    height: 39em;
+    float: left;
+}
+
+#control-title
+{
+    text-align: center;
+    margin-right: 8em;
+}
+
+#controls
+{
+  border-style: solid;
+  margin-left: 1em;
+  width: 70%;
+}
+
+.set-of-controls
+{
+  margin-right: 6em;
+  margin-left: 1em;
+}
+
+#rightSide
+{
+  margin-right: 0em;
+}
+
+.set-of-controls, p
+{
+  font-size: 1.5rem;
+}
+
+.btnBar
+{
+  background-color: Grey;
+  margin-top: .5em;
+  border-style: solid;
+}
+
+.onOff
+{
+  width: 5em;
+  height: 2.5em;
+  margin-right: 3.1em;
+}
+
+.btn-primary
+{
+  color: black;
+  font-weight: bold;
+  background-color: Gold;
+}
+
+.btn-secondary
+{
+   margin-left : .5em;
+}

@@ -1,0 +1,11 @@
+#videoElement {
+  width: 100%;
+	height: 100%;
+  position: relative;
+	background-color: #666;
+}
+
+#canvas {
+  position: relative;
+  color: var(--secondary);
+}

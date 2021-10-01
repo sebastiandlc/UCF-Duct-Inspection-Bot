@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Airduct Inspection Controller</title>
+
+  <link ref="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/w3.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+  <link rel="stylesheet" href="css/font-awesome.min.css">
+
+  <script src="js/camera.js"></script>
+  <script type="text/javascript" src="js/roslib.min.js"></script>
+  <script type="text/javascript" src="js/ros.js" name="ros"></script>
+
+  <style>html,body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}</style>
+
+  <body class="w3-light-grey">
+
+    <!-- Top container -->
+    <div class="w3-bar w3-top w3-black w3-large" style="z-index:4">
+      <button class="w3-bar-item w3-button w3-hide-large w3-hover-none w3-hover-text-light-grey" onclick="w3_open();">Menu</button>
+      <span class="w3-bar-item w3-left-large">Airduct Inspection Controller</span>
+      <span class="w3-bar-itemlow w3-center w3-medium">Connection Status: <span id="status"></span></span>
+
+      <div class="w3-bar-item w3-right w3-image">
+        <img src="logo.png" alt="UCF Logo">
+      </div>
+    </div>
+
+    <!-- Sidebar/menu -->
+    <nav class="w3-sidebar w3-collapse w3-white w3-animate-left" style="z-index:3;width:300px;" id="mySidebar">
+      <div class="w3-container">
+        <h5>Settings Panel</h5>
+      </div>
+
+      <div class="w3-bar-block">
+        <a href="#" class="w3-bar-item w3-padding-16 w3-hide-large w3-black w3-hover-black" onclick="w3_close()" title="close menu">Close Menu</a>
+
+
+
+        <a class="w3-bar-item w3-padding w3-blue btn-group-toggle" data-toggle="buttons">Track Selection</a>
+          <p class="w3-center">
+            <button name="track-toggle" id="both" value="1" type="button" checked>Both</button>
+            <button name="track-toggle" id="bottom" value="3" type="button">Bottom</button>
+            <button name="track-toggle" id="top" value="2" type="button">Top</button>
+          </p>
+
+          <p class="w3-center">
+            <button name="track-toggle" id="bottom-slow" value="5" type="button">Bottom (Slow)</button>
+            <button name="track-toggle" id="top-slow" value="4" type="button">Top (Slow)</button>
+          </p>
+
+        <a class="w3-bar-item w3-padding w3-blue" data-toggle="buttons">Scissor Lift Selection</a>
+          <p class="w3-center">
+            <button name="lift-toggle" id="both-lifts" value="1" type="button" checked>Both</button>
+            <button name="lift-toggle" id="left" value="2" type="button">Left</button>
+            <button name="lift-toggle" id="right" value="3" type="button">Right</button>
+          </p>
+
+        <a class="w3-bar-item w3-padding w3-blue">Track Speeds (default: 2000)</a>
+          <p class="w3-left">
+            <input type="text" name"bottom-speed" class="form-control" id="bottom-tracks" placeholder="bottom tracks">
+          </p>
+
+          <br>
+
+          <p class="w3=left">
+            <input type="text" name"top-speed" class="form-control" id="top-tracks" placeholder="top tracks">
+          </p>
+
+          <button type="submit" id="sub-button" class="btn btn-primary mb-2">Update</button>
+      </div>
+
+      <br>
+
+      <h5>Camera Functions</h5>
+        <table class="w3-table w3-striped w3-white">
+          <tr>
+            <td><i class="w3-text-blue w3-large"></i></td>
+            <td>Take Screenshot</td>
+            <td><button id="cameraButton" type="button">Capture</button></td>
+          </tr>
+
+          <tr>
+            <td><i class="w3-text-blue w3-large"></i></td>
+            <td>Download Map</td>
+            <td><button onclick"" id="map-saver" type="button" name="download">Download</button></td>
+          </tr>
+        </table>
+    </nav>
+
+
+    <!-- Overlay effect when opening sidebar on small screens -->
+    <div class="w3-overlay w3-hide-large w3-animate-opacity" onclick="w3_close()" style="cursor:pointer" title="close side menu" id="myOverlay"></div>
+
+    <!-- !PAGE CONTENT! -->
+    <div class="w3-main" style="margin-left:300px;margin-top:45px;">
+      <div class="w3-panel">
+        <div class="w3-row-padding" style="margin:0 -16px">
+          <!-- Camera Feed -->
+          <div class="w3-twothird">
+            <h5>Camera Feed</h5>
+            <video width="100%" height="100%" id="videoElement" autoplay></video>
+          </div>
+
+          <div class="w3-third">
+            <h5>Controls</h5>
+            <h3>Energizing Commands</h3>
+            <p id="qKey">Q: De-Energize</p>
+            <p id="eKey">E: Energize</p>
+            <h3>Movement Commands</h3>
+            <p id="wKey">W: Forward</p>
+            <p id="aKey">A: Turn Left</p>
+            <p id="sKey">S: Backward</p>
+            <p id="dKey">D: Turn Right</p>
+            <h3>Scissor Lift Commands</h3>
+            <p id="oKey">O: Lift Up</p>
+            <p id="pKey">P: Lift Down</p>
+            <h3>Misc. Commands</h3>
+            <p id="iKey">I: Toggle Track Selection</p>
+          </div>
+        </div>
+      </div>
+
+      <hr>
+      <hr>
+      <br>
+
+      <!-- Footer -->
+      <footer class="w3-container w3-padding-16 w3-light-grey">
+        <h4>About</h4>
+        <p>Web application controller for duct inspection robot</p>
+        <canvas id="canvas" width="1920" height="1080"></canvas>
+      </footer>
+
+    <!-- End page content -->
+    </div>
+
+    <script>
+      // Get the Sidebar
+      var mySidebar = document.getElementById("mySidebar");
+
+      // Get the DIV with overlay effect
+      var overlayBg = document.getElementById("myOverlay");
+
+      // Toggle between showing and hiding the sidebar, and add overlay effect
+      function w3_open() {
+        if (mySidebar.style.display === 'block') {
+          mySidebar.style.display = 'none';
+          overlayBg.style.display = "none";
+        } else {
+          mySidebar.style.display = 'block';
+          overlayBg.style.display = "block";
+        }
+      }
+
+      // Close the sidebar with the close button
+      function w3_close() {
+        mySidebar.style.display = "none";
+        overlayBg.style.display = "none";
+      }
+    </script>
+    <script src="js/jquery-3.3.1.slim.min.js"></script>
+    <script src="js/popper.min.js"></script>
+  </body>
+</html>
